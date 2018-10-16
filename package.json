@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "DEBUG=clap-demo:* npm start",
-    "start": "node ./clap_demo/bin/www"
+    "start": "concurrently \"nodemon ./http_server/bin/www\" \"nodemon ./socket_server/app.js\""
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
   "author": "hexaltation",
   "license": "WTFPL",
   "dependencies": {
-    "express": "^4.16.4"
+    "concurrently": "^4.0.1",
+    "express": "^4.16.4",
+    "ws": "^6.1.0"
   }
 }

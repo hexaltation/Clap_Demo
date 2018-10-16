@@ -27,5 +27,18 @@
       }
       new Clap(container, "demo", settings);
     </script>
+    <script>
+      console.log("Socket connection");
+      var mySocket = new WebSocket("ws://localhost:8080");
+      mySocket.onopen = function (event) {
+        mySocket.send("Here's some text that the server is urgently awaiting!"); 
+      };
+      mySocket.onmessage = function (event) {
+        console.log(event.data);
+      }
+      function sendImage(thing){
+        console.log("Submit button clicked");
+      }
+    </script>
   </body>
 </html>
