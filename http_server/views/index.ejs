@@ -25,18 +25,33 @@
           "boundary":true,
           "boundaryColor":"#000000"
       }
-      new Clap(container, "demo", settings);
+      var slider = new Clap(container, "demo", settings);
     </script>
     <script>
       console.log("Socket connection");
       var mySocket = new WebSocket("ws://localhost:8080");
       mySocket.onopen = function (event) {
-        mySocket.send("Here's some text that the server is urgently awaiting!"); 
+        console.log("Connected");
       };
       mySocket.onmessage = function (event) {
         console.log(event.data);
       }
+      document.addEventListener('clap_change', (evt)=>{
+        let msg = {
+                    'event':'color_info',
+                    'data':evt.colorLevels,
+                    'type':'thumb'
+                  }
+        mySocket.send(JSON.stringify(msg));
+        console.log(evt.colorLevels);
+      });
       function sendImage(thing){
+        let msg = {
+                    'event':'color_info',
+                    'data':slider.colorLevels,
+                    'type':'full'
+                  }
+        mySocket.send(JSON.stringify(msg));
         console.log("Submit button clicked");
       }
     </script>
