@@ -7,5 +7,25 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <div class='form'>
+    <form action="javascript:;" onsubmit="sendImage(this)">
+      <input name="image" type="file" id="file" class="feedback-input">
+      <button type="submit" class="button-blue">SUBMIT</button>
+    </form>
+    </div>
+    <div class='colorLevel'></div>
+    <div class='thumbnail'></div>
+    <script src='/javascripts/clap.min.js'></script>
+    <script>
+      let container = document.getElementsByClassName('colorLevel')[0];
+      let settings ={
+          "width":130,
+          "height":130,
+          "background":"#BBBBBB",
+          "boundary":true,
+          "boundaryColor":"#000000"
+      }
+      new Clap(container, "demo", settings);
+    </script>
   </body>
 </html>

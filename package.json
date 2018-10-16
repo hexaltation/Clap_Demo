@@ -4,7 +4,8 @@
   "description": "A use case of clap controller",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "DEBUG=clap-demo:* npm start",
+    "start": "node ./clap_demo/bin/www"
   },
   "repository": {
     "type": "git",
