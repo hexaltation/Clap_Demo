@@ -10,50 +10,16 @@
     <div class='form'>
     <form action="javascript:;" onsubmit="sendImage(this)">
       <input name="image" type="file" id="file" class="feedback-input">
-      <button type="submit" class="button-blue">SUBMIT</button>
+      <button type="submit" class="button-send">SEND FILE</button>
     </form>
     </div>
     <div class='colorLevel'></div>
     <div class='thumbnail'></div>
+    <form action="javascript:;" onsubmit="downloadImage(this)">
+      <button type="submit" class="button-download">DOWNLOAD</button>
+    </form>
     <script src='/javascripts/clap.min.js'></script>
-    <script>
-      let container = document.getElementsByClassName('colorLevel')[0];
-      let settings ={
-          "width":130,
-          "height":130,
-          "background":"#BBBBBB",
-          "boundary":true,
-          "boundaryColor":"#000000"
-      }
-      var slider = new Clap(container, "demo", settings);
-    </script>
-    <script>
-      console.log("Socket connection");
-      var mySocket = new WebSocket("ws://localhost:8080");
-      mySocket.onopen = function (event) {
-        console.log("Connected");
-      };
-      mySocket.onmessage = function (event) {
-        console.log(event.data);
-      }
-      document.addEventListener('clap_change', (evt)=>{
-        let msg = {
-                    'event':'color_info',
-                    'data':evt.colorLevels,
-                    'type':'thumb'
-                  }
-        mySocket.send(JSON.stringify(msg));
-        console.log(evt.colorLevels);
-      });
-      function sendImage(thing){
-        let msg = {
-                    'event':'color_info',
-                    'data':slider.colorLevels,
-                    'type':'full'
-                  }
-        mySocket.send(JSON.stringify(msg));
-        console.log("Submit button clicked");
-      }
-    </script>
+    <script src='/javascripts/clap_init.js'></script>
+    <script src='/javascripts/clap_socket.js'></script>
   </body>
 </html>
