@@ -1,0 +1,22 @@
+# TODO
+
+## Tasks
+
+- Create a pid mechanisme hash(UserAgent+IP+TimeStamp)
+  - Use external service for IP
+  - if not reachable ip = 127.0.0.1
+- Upload source file to server
+  - Convert file to blob
+  - read blob
+  - create src image
+- Create line ffmpeg to use complex filter color level
+  - Create mechanism to produce thumb
+  - Create mechanism to produce full render
+- Image thumb from server to canvas
+  - Create canvas in display limits keeping ratio of src image.
+  - Send ratio to backend 
+- Download Mechanism
+  - on download websocket send back PID based download link
+  - Front make an xrh call on the address.
+- Purge mechanism on ws close
+- Write install.sh for initiat the project after cloning
