@@ -1,7 +1,7 @@
 console.log("hello world");
 
 const WebSocket = require('ws');
-const {processImage, saveImage} = require('./image');
+const {processImage, saveImage, cleanImages} = require('./image');
 
 const wss = new WebSocket.Server({ port: 8080 });
 
@@ -35,7 +35,10 @@ wss.on('connection', function connection(ws) {
 
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) return ws.terminate();
+    if (ws.isAlive === false) {
+        cleanImages(ws.id);
+        return ws.terminate();
+    }
 
     ws.isAlive = false;
     ws.ping(noop);
