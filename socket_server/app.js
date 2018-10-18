@@ -17,12 +17,16 @@ wss.on('connection', function connection(ws) {
   console.log("some is connecting");
   ws.on('message', (msg)=>{
       let message = JSON.parse(msg);
-      if (message.event === 'color_info'){
+
+      if (message.event === "pid"){
+          ws.id = message.data;
+          console.log("pid :",ws.id)
+      }else if (message.event === 'color_info'){
         console.log("redinmin",message.data.red.in.min);
         processImage(ws, message.data, message.type)
       }else if (message.event === 'img_blob'){
         console.log(message.data);
-        saveImage(message.data);
+        saveImage(ws.id, message.data);
       }else{
         console.log(msg);
       }

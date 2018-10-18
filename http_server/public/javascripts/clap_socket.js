@@ -1,8 +1,32 @@
 console.log("Socket connection");
+
+async function sha256(message) {
+
+    // encode as UTF-8
+    const msgBuffer = new TextEncoder('utf-8').encode(message);
+
+    // hash the message
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    
+    // convert ArrayBuffer to Array
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    // convert bytes to hex string
+    const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+    return hashHex;
+}
+
 var mySocket = new WebSocket("ws://localhost:8080");
 mySocket.binaryType = "arraybuffer";
 
 mySocket.onopen = function (event) {
+    sha256(String(Date.now())+navigator.userAgent).then(pid => {
+        let msg = {
+            'event':'pid',
+            'data':pid,
+            }
+        mySocket.send(JSON.stringify(msg));
+    });
     console.log("Connected");
 };
 
@@ -34,14 +58,28 @@ function downloadImage(thing){
     console.log("Submit button clicked");
 }
 
-function sendImage() {
-    var image = context.getImageData(0, 0, canvas.width, canvas.height);
-    var buffer = new ArrayBuffer(image.data.length);
-    var bytes = new Uint8Array(buffer);
-    for (var i=0; i<bytes.length; i++) {
-        bytes[i] = image.data[i];
+function sendImage(data) {
+    let file = data.files[0];
+    console.log(file);
+
+    var reader = new FileReader();
+    var fileByteArray = [];
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = function (evt) {
+        if (evt.target.readyState == FileReader.DONE) {
+        var arrayBuffer = evt.target.result,
+            array = new Uint8Array(arrayBuffer);
+        for (var i = 0; i < array.length; i++) {
+            fileByteArray.push(array[i]);
+            }
+        }
+        let msg = {
+            'event':'img_blob',
+            'data':fileByteArray,
+            }
+            mySocket.send(JSON.stringify(msg));
+            console.log(msg);
     }
-    mySocket.send(buffer);
 }
 
 function drawImageBinary(blob) {

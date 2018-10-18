@@ -2,16 +2,13 @@
 
 ## Tasks
 
-- Create a pid mechanisme hash(UserAgent+IP+TimeStamp)
-  - Use external service for IP
-  - if not reachable ip = 127.0.0.1
+- Create a pid mechanisme hash(UserAgent+IP+TimeStamp) [X]
 - Upload source file to server
-  - Convert file to blob
-  - read blob
-  - create src image
+  - Convert file to byteArray [X]
+  - create src image from recieved byteArray
 - Create line ffmpeg to use complex filter color level
   - Create mechanism to produce thumb
-  - Create mechanism to produce full render
+  - Create mechanism to produce full render [X]
 - Image thumb from server to canvas
   - Create canvas in display limits keeping ratio of src image.
   - Send ratio to backend 

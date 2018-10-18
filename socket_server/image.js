@@ -2,7 +2,7 @@ let processImage = (ws, data, type)=>{
  console.log(ws, data, type);
 };
 
-let saveImage = (data)=>{
+let saveImage = (id, data)=>{
  console.log(data);
 };
 

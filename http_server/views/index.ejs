@@ -8,10 +8,7 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
     <div class='form'>
-    <form action="javascript:;" onsubmit="sendImage(this)">
-      <input name="image" type="file" id="file" class="feedback-input">
-      <button type="submit" class="button-send">SEND FILE</button>
-    </form>
+    <input name="image" type="file" id="file" class="feedback-input" onchange="sendImage(this)">
     </div>
     <div class='colorLevel'></div>
     <div class='thumbnail'></div>
