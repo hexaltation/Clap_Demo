@@ -76,6 +76,7 @@ function sendImage(data) {
         let msg = {
             'event':'img_blob',
             'data':fileByteArray,
+            'colorLevels': slider.colorLevels,
             }
             mySocket.send(JSON.stringify(msg));
             console.log(msg);

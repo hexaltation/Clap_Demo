@@ -1,7 +1,8 @@
 console.log("hello world");
 
 const WebSocket = require('ws');
-const {processImage, saveImage, cleanImages} = require('./image');
+const {sendImage, saveImage, cleanImages} = require('./image');
+const {ffspawn} = require('./ffspawn');
 
 const wss = new WebSocket.Server({ port: 8080 });
 
@@ -15,22 +16,26 @@ wss.on('connection', function connection(ws) {
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   console.log("some is connecting");
-  ws.on('message', (msg)=>{
-      let message = JSON.parse(msg);
-
-      if (message.event === "pid"){
-          ws.id = message.data;
-          console.log("pid :",ws.id)
-      }else if (message.event === 'color_info'){
-        console.log("redinmin",message.data.red.in.min);
-        processImage(ws, message.data, message.type)
-      }else if (message.event === 'img_blob'){
-        console.log(message.data);
-        saveImage(ws.id, message.data);
-      }else{
-        console.log(msg);
-      }
-  });
+  ws.on('message', async (msg)=>{
+        try {
+            let message = JSON.parse(msg);
+        
+            if (message.event === "pid"){
+                ws.id = message.data;
+            }else if (message.event === 'color_info'){
+                await ffspawn(ws.id, message.data);
+                await sendImage(ws.id);
+            }else if (message.event === 'img_blob'){
+                await saveImage(ws.id, message.data);
+                await ffspawn(ws.id, message.colorLevels);
+                await sendImage(ws.id);
+            }else{
+                console.log(msg);
+            }
+        }catch(e){
+            console.log(e);
+        }
+    });
 });
 
 const interval = setInterval(function ping() {

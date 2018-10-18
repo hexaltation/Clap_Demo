@@ -5,9 +5,9 @@
 - Create a pid mechanisme hash(UserAgent+IP+TimeStamp) [X]
 - Upload source file to server
   - Convert file to byteArray [X]
-  - create src image from recieved byteArray
-- Create line ffmpeg to use complex filter color level
-  - Create mechanism to produce thumb
+  - create src image from recieved byteArray [X]
+- Create line ffmpeg to use complex filter color level [X]
+  - Create mechanism to produce thumb [X]
   - Create mechanism to produce full render [X]
 - Image thumb from server to canvas
   - Create canvas in display limits keeping ratio of src image.
@@ -15,5 +15,5 @@
 - Download Mechanism
   - on download websocket send back PID based download link
   - Front make an xrh call on the address.
-- Purge mechanism on ws close
+- Purge mechanism on ws close [X]
 - Write install.sh for initiat the project after cloning

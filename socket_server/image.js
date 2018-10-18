@@ -1,15 +1,21 @@
 const fs = require('fs');
 
-let processImage = (ws, data, type)=>{
-    console.log(ws, data, type);
+let sendImage = (id)=>{
+    return new Promise ((resolve, reject)=>{
+        console.log(id);
+        resolve();
+    });
 };
 
 let saveImage = (id, data)=>{
-    console.log(typeof data);
-    let mybyteArray = new Uint8Array(data);
-    fs.writeFile('./img/src/'+id, mybyteArray, (err) => {
-        if (err) throw err;
-        console.log('The file '+id+' has been saved!');
+    return new Promise ((resolve, reject)=>{
+        console.log(typeof data);
+        let mybyteArray = new Uint8Array(data);
+        fs.writeFile('./img/src/'+id, mybyteArray, (err) => {
+            if (err) reject(err);
+            console.log('The file '+id+' has been saved!');
+            resolve(id);
+        });
     });
 };
 
@@ -25,7 +31,7 @@ let cleanImages = (id)=>{
 };
 
 module.exports = {
-    "processImage":processImage,
+    "sendImage":sendImage,
     "saveImage":saveImage,
     "cleanImages":cleanImages
 }
