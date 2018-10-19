@@ -11,7 +11,9 @@
     <input name="image" type="file" id="file" class="feedback-input" onchange="sendImage(this)">
     </div>
     <div class='colorLevel'></div>
-    <div class='thumbnail'></div>
+    <div class='thumbnail'>
+      <canvas id="myCanvas"></canvas>
+    </div>
     <form action="javascript:;" onsubmit="downloadImage(this)">
       <button type="submit" class="button-download">DOWNLOAD</button>
     </form>

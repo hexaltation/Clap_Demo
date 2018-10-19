@@ -1,7 +1,7 @@
 console.log("hello world");
 
 const WebSocket = require('ws');
-const {sendImage, saveImage, cleanImages} = require('./image');
+const {readImage, saveImage, cleanImages} = require('./image');
 const {ffspawn} = require('./ffspawn');
 
 const wss = new WebSocket.Server({ port: 8080 });
@@ -19,16 +19,19 @@ wss.on('connection', function connection(ws) {
   ws.on('message', async (msg)=>{
         try {
             let message = JSON.parse(msg);
+            let data;
         
             if (message.event === "pid"){
                 ws.id = message.data;
             }else if (message.event === 'color_info'){
                 await ffspawn(ws.id, message.data);
-                await sendImage(ws.id);
+                data = await readImage(ws.id);
+                sendImage(ws, data);
             }else if (message.event === 'img_blob'){
                 await saveImage(ws.id, message.data);
                 await ffspawn(ws.id, message.colorLevels);
-                await sendImage(ws.id);
+                data = await readImage(ws.id);
+                sendImage(ws, data);
             }else{
                 console.log(msg);
             }
@@ -37,6 +40,14 @@ wss.on('connection', function connection(ws) {
         }
     });
 });
+
+const sendImage = (ws, data)=>{
+    let msg = {
+        'event':'blobImage',
+        'data':data,
+        }
+    ws.send(JSON.stringify(msg));
+};
 
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {

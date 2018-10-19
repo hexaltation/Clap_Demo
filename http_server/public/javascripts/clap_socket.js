@@ -31,11 +31,11 @@ mySocket.onopen = function (event) {
 };
 
 mySocket.onmessage = function (event) {
-    let message = JSON.parse(event)
+    let message = JSON.parse(event.data);
     if (message.event==='blobImage'){
+        let blob = message.data.data;
         drawImageBinary(blob);
     }
-    console.log(event.data);
 }
 
 document.addEventListener('clap_change', (evt)=>{
@@ -45,7 +45,6 @@ document.addEventListener('clap_change', (evt)=>{
                 'type':'thumb'
                 }
     mySocket.send(JSON.stringify(msg));
-    console.log(evt.colorLevels);
 });
 
 function downloadImage(thing){
@@ -60,7 +59,16 @@ function downloadImage(thing){
 
 function sendImage(data) {
     let file = data.files[0];
-    console.log(file);
+    var url = URL.createObjectURL(file);
+    var img = new Image;
+
+    img.onload = function() {
+        var canvas = document.getElementById("myCanvas");
+        canvas.height=img.height;
+        canvas.width=img.width;
+    };
+
+    img.src = url;
 
     var reader = new FileReader();
     var fileByteArray = [];
@@ -78,23 +86,34 @@ function sendImage(data) {
             'data':fileByteArray,
             'colorLevels': slider.colorLevels,
             }
-            mySocket.send(JSON.stringify(msg));
-            console.log(msg);
+        mySocket.send(JSON.stringify(msg));
     }
 }
 
-function drawImageBinary(blob) {
-    var bytes = new Uint8Array(blob);
+function drawImageBinary(imgData) {
 
-    var imageData = context.createImageData(canvas.width, canvas.height);
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
 
-    for (var i=8; i<imageData.data.length; i++) {
-        imageData.data[i] = bytes[i];
+    //var uInt8Array = new Uint8Array(imgData);
+    var uInt8Array = imgData;
+    var i = uInt8Array.length;
+    var binaryString = [i];
+    while (i--) {
+        binaryString[i] = String.fromCharCode(uInt8Array[i]);
     }
-    context.putImageData(imageData, 0, 0);
+    var data = binaryString.join('');
 
-    var img = document.createElement('img');
-    img.height = canvas.height;
-    img.width = canvas.width;
-    img.src = canvas.toDataURL();
+    var base64 = window.btoa(data);
+
+    var img = new Image();
+    img.src = "data:image/jpeg;base64," + base64;
+    img.onload = function () {
+        console.log("Image Onload");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.onerror = function (err) {
+        console.log("Img Onerror:", err);
+    };
+
 }
