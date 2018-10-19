@@ -17,6 +17,7 @@ async function sha256(message) {
 }
 
 var mySocket = new WebSocket("ws://localhost:8080");
+var id;
 mySocket.binaryType = "arraybuffer";
 
 mySocket.onopen = function (event) {
@@ -26,6 +27,7 @@ mySocket.onopen = function (event) {
             'data':pid,
             }
         mySocket.send(JSON.stringify(msg));
+        id = pid;
     });
     console.log("Connected");
 };
@@ -48,13 +50,24 @@ document.addEventListener('clap_change', (evt)=>{
 });
 
 function downloadImage(thing){
-    let msg = {
-                'event':'color_info',
-                'data':slider.colorLevels,
-                'type':'full'
-                }
-    mySocket.send(JSON.stringify(msg));
-    console.log("Submit button clicked");
+    console.log("Download button clicked");
+    let url = "http://localhost:3000/img/"+id;
+    console.log(url);
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = 'blob';
+    xhr.onload = function (e) {
+        var blob = xhr.response;
+        saveBlob(blob, id+".jpg");
+    }
+    xhr.send();
+}
+
+function saveBlob(blob, fileName) {
+    var a = document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
 }
 
 function sendImage(data) {
