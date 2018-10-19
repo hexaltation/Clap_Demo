@@ -3,17 +3,18 @@
 ## Tasks
 
 - Create a pid mechanisme hash(UserAgent+IP+TimeStamp) [X]
-- Upload source file to server
+- Upload source file to server [X]
   - Convert file to byteArray [X]
   - create src image from recieved byteArray [X]
 - Create line ffmpeg to use complex filter color level [X]
   - Create mechanism to produce thumb [X]
   - Create mechanism to produce full render [X]
-- Image thumb from server to canvas
-  - Create canvas in display limits keeping ratio of src image.
-  - Send ratio to backend 
-- Download Mechanism
-  - on download websocket send back PID based download link
-  - Front make an xrh call on the address.
+- Image thumb from server to canvas [\]
+  - Create canvas in display limits keeping ratio of src image.[X]
+  - Send ratio to backend [X]
+- Download Mechanism [X]
+  - on download websocket send back PID based download link [X]
+  - Front make an xrh call on the address. [X]
 - Purge mechanism on ws close [X]
-- Write install.sh for initiat the project after cloning
+- Write install.sh for initiate the project after cloning
+- Test file type front and back end
